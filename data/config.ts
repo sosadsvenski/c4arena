@@ -11,8 +11,8 @@ export const siteConfig = {
   tagline: "Компьютерный клуб нового уровня",
   description:
     "Мощные ПК, неоновая атмосфера и удобные тарифы. Приходите играть в одиночку или с командой — места ждут вас.",
-  telegramUsername: "c4arena_krd",
-  telegramUrl: "https://t.me/c4arena_krd",
+  telegramUsername: "C4admin",
+  telegramUrl: "https://t.me/C4admin",
   ctaText: "Забронировать ПК",
   headerCtaText: "Забронировать",
   // Необязательные поля контактов: оставьте пустую строку, чтобы скрыть блок
