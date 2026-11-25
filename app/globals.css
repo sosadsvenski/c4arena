@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #07080b;
+  color: #e8eaf0;
+  -webkit-font-smoothing: antialiased;
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+@layer components {
+  /* «Liquid glass»: размытие фона под полупрозрачной карточкой */
+  .glass {
+    @apply relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-xl;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+      0 8px 32px rgba(0, 0, 0, 0.45);
+  }
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 40%);
+  }
+
+  .btn-neon {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-neon-cyan px-5 py-3 text-sm font-bold uppercase tracking-wide text-ink shadow-neon-cyan transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0;
+  }
+
+  .section-title {
+    @apply font-display text-3xl font-extrabold uppercase tracking-tight sm:text-4xl;
+  }
+
+  .neon-text {
+    background: linear-gradient(90deg, #22e6ff, #8b5cf6 55%, #ff2bd6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}

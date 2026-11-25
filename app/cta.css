@@ -1,0 +1,217 @@
+/* ==========================================================================
+   CTA БРОНИРОВАНИЯ: большая кнопка, липкая панель на телефоне, баннер
+   Общий файл для Next-проекта и статичного превью (docs/).
+   ========================================================================== */
+
+/* большая кнопка с бликом и «дыханием» */
+.cta-big {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 0 28px;
+  border-radius: 18px;
+  overflow: hidden;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: 0.01em;
+  color: #05070a;
+  background: linear-gradient(100deg, #22e6ff, #7aa8ff 55%, #c07bff);
+  box-shadow: 0 12px 40px rgba(34, 230, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+  animation: ctapulse 2.6s ease-out infinite;
+  transition: transform 0.2s, filter 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.cta-big::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.65) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: ctashine 3.4s ease-in-out 1s infinite;
+}
+.cta-big svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+.cta-big:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+.cta-big:active {
+  transform: scale(0.98);
+}
+@keyframes ctapulse {
+  0% {
+    box-shadow: 0 12px 40px rgba(34, 230, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.35) inset, 0 0 0 0 rgba(34, 230, 255, 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 12px 40px rgba(34, 230, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.35) inset, 0 0 0 18px rgba(34, 230, 255, 0);
+  }
+}
+@keyframes ctashine {
+  0% {
+    transform: translateX(-130%);
+  }
+  45%,
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+/* в hero: кнопка на всю ширину, под ней — пояснение */
+.hx-cta .cta-big {
+  width: 100%;
+}
+.cta-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: rgba(238, 240, 246, 0.6);
+}
+.cta-note b {
+  color: #22e6ff;
+  font-weight: 600;
+}
+@media (min-width: 520px) {
+  .hx-cta .cta-big {
+    width: auto;
+    min-width: 300px;
+  }
+}
+
+/* липкая панель брони (только телефон/планшет) */
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(8, 9, 13, 0.84);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(110%);
+  visibility: hidden;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.35s;
+}
+.sticky-cta.show {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sticky-cta .st {
+  min-width: 0;
+  flex: 1;
+  line-height: 1.25;
+}
+.sticky-cta .st b {
+  display: block;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: #eef0f6;
+}
+.sticky-cta .st span {
+  display: block;
+  font-size: 12px;
+  color: rgba(238, 240, 246, 0.6);
+}
+.sticky-cta .cta-big {
+  flex: none;
+  min-height: 50px;
+  padding: 0 20px;
+  font-size: 15px;
+  border-radius: 15px;
+}
+@media (max-width: 380px) {
+  .cta-big {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 360px) {
+  .sticky-cta .st span {
+    display: none;
+  }
+}
+@media (min-width: 800px) {
+  .sticky-cta {
+    display: none;
+  }
+}
+
+/* баннер после тарифов */
+.cta-band .cb {
+  position: relative;
+  overflow: hidden;
+  padding: 34px 22px 30px;
+  border-radius: 28px;
+  text-align: center;
+  background:
+    radial-gradient(520px 260px at 15% 0, rgba(34, 230, 255, 0.22), transparent 70%),
+    radial-gradient(520px 260px at 90% 100%, rgba(255, 43, 214, 0.22), transparent 70%),
+    #0d0f15;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+.cta-band h2 {
+  margin: 0;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 7vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.cta-band h2 em {
+  font-style: normal;
+  background: linear-gradient(90deg, #22e6ff, #8b5cf6 55%, #ff2bd6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.cta-band p {
+  max-width: 460px;
+  margin: 14px auto 0;
+  color: rgba(238, 240, 246, 0.7);
+}
+.cta-band .chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0 24px;
+  padding: 0;
+  list-style: none;
+}
+.cta-band .chips li {
+  padding: 8px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+.cta-band .cta-big {
+  width: 100%;
+  max-width: 420px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-big,
+  .cta-big::before {
+    animation: none;
+  }
+  .sticky-cta {
+    transition: none;
+  }
+}

@@ -1,0 +1,24 @@
+/* Меню бара */
+.grp{display:flex;align-items:center;gap:12px;margin:34px 0 0;font-size:12px;font-weight:700;line-height:1;letter-spacing:.2em;text-transform:uppercase;color:rgba(238,240,246,.6)}
+.grp::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.09)}
+.menu-grid{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:16px 0 0;padding:0;list-style:none}
+@media(min-width:760px){.menu-grid.g4{grid-template-columns:repeat(4,1fr)}.menu-grid.g3{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:759px){.menu-grid.g3>.drink:last-child{grid-column:1/-1}}
+.drink{position:relative;overflow:hidden;border-radius:26px;background:#0d0f15;box-shadow:0 0 0 1px rgba(255,255,255,.09) inset;padding:16px 12px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;transition:transform .3s,box-shadow .3s}
+.drink::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,var(--c),transparent 62%);opacity:.28;pointer-events:none;transition:opacity .3s}
+.drink:hover{transform:translateY(-4px);box-shadow:0 0 0 1px var(--c) inset}
+.drink:hover::before{opacity:.42}
+.drink .art{position:relative;height:230px;width:100%;display:grid;place-items:center}
+.drink .art::after{content:"";position:absolute;bottom:0;left:50%;width:70px;height:10px;margin-left:-35px;border-radius:50%;background:var(--c);filter:blur(10px);opacity:.7}
+.drink .fl{display:grid;place-items:center;animation:drinkfloat 5s ease-in-out infinite}
+.drink svg,.drink .art img{height:230px;width:auto;max-width:100%;filter:drop-shadow(0 16px 14px rgba(0,0,0,.5));transition:transform .5s}
+.drink .art img{object-fit:contain}
+.drink:hover svg,.drink:hover .art img{transform:rotateY(-20deg) rotateZ(-3deg) scale(1.05)}
+.drink.has-img .art{height:230px}
+.drink.has-img .art img{height:230px}
+@keyframes drinkfloat{50%{transform:translateY(-7px)}}
+.drink h4{position:relative;margin:14px 0 10px;font-size:15px;font-weight:600;line-height:1.25;color:#eef0f6}
+.drink .note{position:relative;margin:-8px 0 10px;font-size:12px;color:rgba(238,240,246,.55)}
+.drink .price{position:relative;margin-top:auto;display:inline-flex;align-items:baseline;gap:3px;padding:6px 16px;border-radius:99px;background:rgba(255,255,255,.07);box-shadow:0 0 0 1px rgba(255,255,255,.1) inset;font-weight:800;font-size:20px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:#fff}
+.drink .price small{font-size:14px;font-weight:700;color:rgba(255,255,255,.7)}
+@media(prefers-reduced-motion:reduce){.drink .fl{animation:none}.drink,.drink svg,.drink .art img{transition:none}}

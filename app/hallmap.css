@@ -1,0 +1,188 @@
+/* ==========================================================================
+   СХЕМА ЗАЛА: интерактивные места и карточка характеристик
+   Общий файл для Next-проекта и статичного превью (docs/).
+   ========================================================================== */
+
+.mapcap {
+  margin: -4px 0 12px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(238, 240, 246, 0.6);
+}
+
+/* место на схеме */
+.seat {
+  cursor: pointer;
+  outline: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.seat .b {
+  transition: fill 0.2s, stroke-width 0.2s;
+}
+.seat:hover .b,
+.seat.hv .b,
+.seat.sel .b,
+.seat:focus-visible .b {
+  fill: var(--sf);
+  stroke-width: 2;
+  stroke-opacity: 1;
+}
+.seat.sel,
+.seat.hv,
+.seat:focus-visible {
+  transform: scale(1.1);
+}
+.seat.sel .b {
+  filter: drop-shadow(0 0 6px var(--sc));
+}
+
+/* карточка характеристик */
+.seatcard {
+  --zc: #22e6ff;
+  --zc2: rgba(34, 230, 255, 0.18);
+  margin-top: 14px;
+  padding: 14px 16px 16px;
+  min-height: 238px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09) inset;
+  transition: box-shadow 0.3s;
+}
+.seatcard[data-z="trio"] {
+  --zc: #ff2bd6;
+  --zc2: rgba(255, 43, 214, 0.22);
+  box-shadow: 0 0 0 1px rgba(255, 43, 214, 0.45) inset, 0 0 34px rgba(255, 43, 214, 0.14);
+}
+.seatcard .sc {
+  animation: scrise 0.3s ease both;
+}
+@keyframes scrise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.sc-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sc-n {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  color: #05070a;
+  background: var(--zc);
+  box-shadow: 0 0 20px var(--zc2);
+}
+.sc-h b {
+  display: block;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.sc-h small {
+  display: block;
+  font-size: 12.5px;
+  color: rgba(238, 240, 246, 0.6);
+}
+.sc-top {
+  margin-left: auto;
+  flex: none;
+  padding: 5px 9px;
+  border-radius: 8px;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background: linear-gradient(90deg, #ff2bd6, #8b5cf6);
+  box-shadow: 0 0 18px rgba(255, 43, 214, 0.45);
+}
+.sc-r {
+  margin: 12px 0 0;
+  padding: 0;
+}
+.sc-r > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  font-size: 14px;
+}
+.sc-r dt {
+  flex: none;
+  color: rgba(238, 240, 246, 0.6);
+}
+.sc-r dd {
+  margin: 0;
+  min-width: 0;
+  text-align: right;
+  font-weight: 600;
+}
+.sc-r .g dd {
+  color: var(--zc);
+}
+.sc-f {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+.sc-f span {
+  font-size: 13px;
+  color: rgba(238, 240, 246, 0.6);
+}
+.sc-f span b {
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: #eef0f6;
+}
+.sc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #05070a;
+  background: var(--zc);
+  box-shadow: 0 6px 22px var(--zc2);
+  transition: transform 0.2s, filter 0.2s;
+}
+.sc-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+@media (max-width: 420px) {
+  .sc-btn {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seatcard .sc {
+    animation: none;
+  }
+  .seat {
+    transition: none;
+  }
+}

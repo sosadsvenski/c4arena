@@ -1,0 +1,660 @@
+/* ==========================================================================
+   HERO: сцена с логотипом (бомба + текст поверх), анимации и фон
+   Структура: .hero > .hbg (фон) + .hgrid > (.hcopy + .stage)
+   Маски (--m) задаются инлайном у элементов: url(/images/...) — так проще
+   подменять пути (в одностраничном превью — data:-URI).
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  --gut: 0px; /* горизонтальный «выпуск» фона за боковые отступы страницы */
+  --hbg-top: 0px; /* насколько фон заходит наверх, под шапку */
+}
+
+.hero .sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- ФОН ---------- */
+.hbg {
+  position: absolute;
+  inset: var(--hbg-top) calc(var(--gut) * -1) 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  -webkit-mask: linear-gradient(#000 90%, transparent);
+  mask: linear-gradient(#000 90%, transparent);
+}
+.hbg .photo-bg {
+  position: absolute;
+  inset: -6%;
+  background: var(--photo) center 40% / cover no-repeat;
+  opacity: 0.44;
+  filter: saturate(1.3) blur(1.5px);
+  animation: kenburns 34s ease-in-out infinite alternate;
+}
+.hbg .shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 60% at 50% 42%, transparent 0%, rgba(6, 7, 10, 0.5) 70%, rgba(6, 7, 10, 0.9) 100%),
+    linear-gradient(180deg, rgba(6, 7, 10, 0.65), rgba(6, 7, 10, 0.12) 35%, rgba(6, 7, 10, 0.55));
+}
+.hbg .blob {
+  position: absolute;
+  width: 46vmax;
+  height: 46vmax;
+  max-width: 640px;
+  max-height: 640px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.hbg .b1 {
+  left: -12%;
+  top: -8%;
+  background: #22e6ff;
+  opacity: 0.32;
+  animation: drift1 19s ease-in-out infinite alternate;
+}
+.hbg .b2 {
+  right: -14%;
+  top: 14%;
+  background: #ff2bd6;
+  opacity: 0.28;
+  animation: drift2 23s ease-in-out infinite alternate;
+}
+.hbg .b3 {
+  left: 30%;
+  bottom: -26%;
+  background: #8b5cf6;
+  opacity: 0.38;
+  animation: drift3 27s ease-in-out infinite alternate;
+}
+
+/* неоновый пол в перспективе */
+.hbg .floor {
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  bottom: 0;
+  height: 38%;
+  perspective: 520px;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(transparent, #000 78%);
+  mask: linear-gradient(transparent, #000 78%);
+}
+.hbg .floor::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 320%;
+  transform-origin: 50% 0;
+  transform: rotateX(63deg);
+  background-image:
+    linear-gradient(rgba(34, 230, 255, 0.38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.6) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: floor 2.4s linear infinite;
+}
+.hbg .floor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 70% at 50% 0, rgba(255, 43, 214, 0.42), transparent 70%);
+}
+
+/* лёгкие «строки развёртки» для киберпанк-фактуры */
+.hbg .scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* искры, поднимающиеся вверх */
+.hbg .sparks i {
+  position: absolute;
+  bottom: -12px;
+  left: var(--x);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 12px 3px var(--c);
+  opacity: 0;
+  animation: rise var(--d) linear var(--dl) infinite;
+}
+
+/* ---------- РАСКЛАДКА ---------- */
+.hgrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 22px;
+  align-items: center;
+  justify-items: center;
+}
+.hcopy {
+  text-align: center;
+  min-width: 0;
+  animation: fadeUp 0.9s 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.hcopy .tag {
+  margin: 0;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: clamp(25px, 6.6vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.hcopy .tag em {
+  font-style: normal;
+  background: linear-gradient(90deg, #22e6ff, #8b5cf6 55%, #ff2bd6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hcopy .lead {
+  max-width: 520px;
+  margin: 16px auto 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 17px;
+}
+.hx-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 26px;
+}
+.hx-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 28px auto 0;
+  max-width: 520px;
+}
+.hx-stat {
+  padding: 14px 12px 12px;
+  border-radius: 18px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09) inset;
+}
+.hx-stat b {
+  display: block;
+  font-family: var(--font-montserrat, Montserrat), var(--font-head, Montserrat), sans-serif;
+  font-weight: 800;
+  font-size: clamp(20px, 5vw, 28px);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.hx-stat span {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: rgba(238, 240, 246, 0.6);
+}
+@media (min-width: 520px) {
+  .hx-cta {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+.stagebox {
+  order: -1;
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .hgrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+    gap: 56px;
+  }
+  .hcopy {
+    text-align: left;
+    justify-self: start;
+  }
+  .hcopy .lead {
+    margin-left: 0;
+    font-size: 18px;
+  }
+  .hx-cta {
+    justify-content: flex-start;
+  }
+  .hx-stats {
+    margin-left: 0;
+  }
+  .stagebox {
+    order: 0;
+  }
+}
+
+/* ---------- СЦЕНА С ЛОГОТИПОМ ---------- */
+.stage {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  width: min(100%, 380px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+}
+@media (min-width: 640px) {
+  .stage {
+    width: min(100%, 460px);
+  }
+}
+@media (min-width: 960px) {
+  .stage {
+    width: 100%;
+  }
+}
+
+/* слои (параллакс: каждый слой смещается на свой коэффициент --k) */
+.layer {
+  position: absolute;
+  transform: translate3d(calc(var(--px) * var(--k, 0) * 1px), calc(var(--py) * var(--k, 0) * 1px), 0);
+  will-change: transform;
+}
+.layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.l-bomb {
+  left: 15%;
+  top: 16%;
+  width: 70%;
+  --k: -12;
+}
+.l-c4 {
+  left: 25%;
+  top: 2%;
+  width: 50%;
+  --k: 14;
+}
+.l-name {
+  left: 3%;
+  top: 30%;
+  width: 94%;
+  --k: 24;
+}
+.l-chip {
+  --k: 38;
+}
+
+/* свечение и вращающиеся кольца за логотипом */
+.halo {
+  position: absolute;
+  inset: 4% 2%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(34, 230, 255, 0.34), rgba(139, 92, 246, 0.22) 55%, transparent 78%);
+  filter: blur(26px);
+  transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -10px), 0);
+  animation: pulse 5.5s ease-in-out infinite;
+}
+/* кольца вращаются внутри круглого «обрезателя»: повёрнутый квадрат иначе расширяет область прокрутки страницы */
+.rings {
+  position: absolute;
+  inset: -4%;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ring {
+  position: absolute;
+  inset: 8.5%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 52%, rgba(34, 230, 255, 0.85) 72%, rgba(255, 43, 214, 0.85) 90%, transparent 100%);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  opacity: 0.6;
+  animation: spin 16s linear infinite, fadeIn 1.4s 0.4s ease both;
+}
+.ring.r2 {
+  inset: 3%;
+  background: conic-gradient(from 180deg, transparent 0 60%, rgba(139, 92, 246, 0.8) 85%, transparent 100%);
+  opacity: 0.4;
+  animation: spin 28s linear infinite reverse, fadeIn 1.4s 0.6s ease both;
+}
+.ring.r3 {
+  inset: 8.5%;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  opacity: 1;
+  animation: spin 90s linear infinite;
+}
+
+/* вход + парение */
+.in {
+  position: relative;
+}
+.in-bomb {
+  animation: inBomb 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.in-c4 {
+  animation: inTop 1s 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.in-name {
+  animation: inWipe 1.1s 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.fl-a {
+  position: relative;
+  animation: floaty 7.5s ease-in-out infinite;
+}
+.fl-b {
+  position: relative;
+  animation: floaty2 8.5s ease-in-out infinite;
+}
+.fl-c {
+  position: relative;
+  animation: floaty2 9.5s -3s ease-in-out infinite;
+}
+
+/* белый текст получает неоновое свечение и отделяется от бомбы тенью */
+.l-bomb img {
+  filter: drop-shadow(0 0 0 rgba(4, 5, 8, 0.95)) drop-shadow(0 26px 34px rgba(0, 0, 0, 0.5));
+}
+.txt {
+  position: relative;
+}
+.txt img {
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 22px rgba(34, 230, 255, 0.28));
+}
+/* цветной блик, пробегающий по буквам */
+.txt .sh {
+  position: absolute;
+  inset: 0;
+  -webkit-mask: var(--m) center / 100% 100% no-repeat;
+  mask: var(--m) center / 100% 100% no-repeat;
+  background: linear-gradient(
+      100deg,
+      transparent 40%,
+      rgba(34, 230, 255, 0.95) 46%,
+      #fff 50%,
+      rgba(255, 43, 214, 0.95) 54%,
+      transparent 60%
+    )
+    0 0 / 250% 100% no-repeat;
+  background-position: 150% 0;
+  animation: sweep 6s 2.2s ease-in-out infinite;
+}
+.txt.t2 .sh {
+  animation-delay: 2.6s;
+}
+
+/* сканирующий луч по бомбе и мигающий индикатор */
+.l-bomb .scan {
+  position: absolute;
+  inset: 0;
+  -webkit-mask: var(--m) center / 100% 100% no-repeat;
+  mask: var(--m) center / 100% 100% no-repeat;
+  background: linear-gradient(180deg, transparent 40%, rgba(34, 230, 255, 0.7) 50%, transparent 60%) 0 0 / 100% 300% no-repeat;
+  background-position: 0 100%;
+  mix-blend-mode: screen;
+  animation: scan 6.5s 1.6s ease-in-out infinite;
+}
+.l-bomb .led {
+  position: absolute;
+  left: var(--lx, 8%);
+  top: var(--ly, 14%);
+  width: 7%;
+  aspect-ratio: 1;
+  margin: -3.5% 0 0 -3.5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 12%, #ff4d4d 22%, rgba(255, 30, 30, 0.55) 45%, transparent 70%);
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+/* плавающие стеклянные чипы вокруг сцены */
+.hchip {
+  position: relative;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #fff;
+  background: rgba(10, 12, 18, 0.7);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.hchip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cc, #22e6ff);
+  box-shadow: 0 0 10px var(--cc, #22e6ff);
+}
+.l-chip.a {
+  left: -2%;
+  bottom: 12%;
+  --cc: #22e6ff;
+}
+.l-chip.b {
+  right: -2%;
+  top: 46%;
+  --cc: #ff2bd6;
+}
+.l-chip .in {
+  animation: fadeUp 0.9s 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.l-chip.b .in {
+  animation-delay: 1.5s;
+}
+.l-chip.b .fl-b {
+  animation-delay: -2s;
+}
+@media (min-width: 640px) {
+  .hchip {
+    display: inline-flex;
+  }
+}
+
+/* ---------- КЛЮЧЕВЫЕ КАДРЫ ---------- */
+@keyframes kenburns {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-1.5%, 1%, 0);
+  }
+}
+@keyframes drift1 {
+  to {
+    transform: translate3d(14%, 18%, 0) scale(1.15);
+  }
+}
+@keyframes drift2 {
+  to {
+    transform: translate3d(-18%, 10%, 0) scale(0.9);
+  }
+}
+@keyframes drift3 {
+  to {
+    transform: translate3d(-22%, -12%, 0) scale(1.2);
+  }
+}
+@keyframes floor {
+  to {
+    background-position: 0 64px;
+  }
+}
+@keyframes rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(var(--dx, 0px), -720px, 0) scale(1);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+    scale: 0.97;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.05;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+}
+@keyframes inBomb {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 9%, 0) scale(0.84);
+    filter: blur(12px);
+  }
+}
+@keyframes inTop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -16%, 0) scale(1.08);
+    filter: blur(10px);
+  }
+}
+@keyframes inWipe {
+  from {
+    opacity: 0;
+    clip-path: inset(0 50% 0 50%);
+    transform: scale(0.96);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-1deg);
+  }
+  50% {
+    transform: translate3d(0, -2.6%, 0) rotate(1.2deg);
+  }
+}
+@keyframes floaty2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 2.2%, 0);
+  }
+}
+@keyframes sweep {
+  0% {
+    background-position: 150% 0;
+  }
+  42%,
+  100% {
+    background-position: -50% 0;
+  }
+}
+@keyframes scan {
+  0% {
+    background-position: 0 100%;
+  }
+  45%,
+  100% {
+    background-position: 0 0;
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* ---------- ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНОВ ---------- */
+@media (max-width: 700px) {
+  /* самые дорогие эффекты упрощаем: без размытия и движения фото, меньше искр и свечения */
+  .hbg .photo-bg {
+    inset: 0;
+    filter: none;
+    animation: none;
+  }
+  .hbg .blob {
+    filter: blur(52px);
+  }
+  .hbg .scanlines {
+    display: none;
+  }
+  .hbg .sparks i:nth-child(n + 11) {
+    display: none;
+  }
+  .halo {
+    filter: blur(16px);
+  }
+}
+/* когда hero вне экрана — анимации на паузе (экономит батарею) */
+.hero.off *,
+.hero.off *::before,
+.hero.off *::after {
+  animation-play-state: paused !important;
+}
+
+/* уважаем «уменьшить анимацию» */
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .hero *::before,
+  .hero *::after {
+    animation: none !important;
+  }
+  .hero .layer {
+    transform: none !important;
+  }
+  .hero .txt .sh,
+  .hero .l-bomb .scan {
+    display: none;
+  }
+}
